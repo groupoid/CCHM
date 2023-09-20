@@ -113,10 +113,10 @@ propSet (A : U) (h : isProp A) : isSet A =
                         , (j=1) -> h a (q @ i)]
 
 propIsContr (A : U) : isProp (isContr A) = lemProp (isContr A) rem where
-  rem (t : isContr A) : isProp (isContr A) = propSig A T pA pB where
-  T (x : A) : U = (y : A) -> Path A x y
-  pA (x y : A) : Path A x y = composition A x t.1 y (<i> t.2 x @ -i) (t.2 y)
-  pB (x : A) : isProp (T x) = propPi A (\ (y : A) -> Path A x y) (propSet A pA x)
+  rem (t : isContr A) : isProp (isContr A) = propSig A Tx pA pB where
+    Tx (x : A) : U = (y : A) -> Path A x y
+    pA (x y : A) : Path A x y = composition A x t.1 y (<i> t.2 x @ -i) (t.2 y)
+    pB (x : A) : isProp (Tx x) = propPi A (\ (y : A) -> Path A x y) (propSet A pA x)
 
 propIsProp (A : U) : isProp (isProp A) =
   \(f g : isProp A) -> <i> \(a b : A) ->
