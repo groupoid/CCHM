@@ -93,7 +93,7 @@ kanOpRefl (A: U) (a b: A) (q: Path A a b)
 transC    (A:U) (a:A) : A = comp (<_>A) a []
 lemTransC (A:U) (a:A) : Path A (transC A a) a = <i>comp (<_>A) a [(i=1) -> <_>a]
 
-{-
+
 compInv' (A:U) (a:A)
   : (x:A) (p:Path A a x)
  -> Path (Path A x x) (<_>x) (composition A x a x (<i>p@-i) p)
@@ -104,7 +104,7 @@ compInv' (A:U) (a:A)
         = <j i>comp (<_>A) a [(j=0) -> <_>a,
                               (i=0) -> <_>a,
                               (i=1) -> <_>a]
--}
+
 
 compInv (A:U) (a b:A) (q:Path A a b)
   : (x:A) (p:Path A b x)

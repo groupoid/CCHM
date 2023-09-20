@@ -34,7 +34,8 @@ turnZ (x: loopS1): bool -> loopS1 = split { false -> backTurn x ; true -> oneTur
 inversion:         bool -> loopS1 = split { false -> <i> loop1 @ -i ; true -> loop1 }
 lnb   (n: nat) (b: bool):  loopS1 = loopZ n b
 loopIt    : Z   -> loopS1 = split { inl n -> loopNeg n ; inr n -> loopPos n }
-compInvS1 : Path loopS1 (refl S1 base) (compS1 invLoop loop1) = compInv' S1 base base loop1
+compInvS1 : Path loopS1 (refl S1 base) (compS1 invLoop loop1) =
+  compInv' S1 base base loop1
 
 -- Helix for Winding
 helix : S1 -> U = split { base -> Z ; loop @ i -> sucPathZ @ i }
