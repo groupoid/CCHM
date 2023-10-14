@@ -26,8 +26,8 @@ data colimit (A : nat -> U) (f : (n : nat) -> A n -> A (succ n))
 data coeqP (A B: U) (p : A -> (b1 b2: B) * (_: Path B b1 b2) * (Path B b1 b2))
    = inP (b: B) | glueP (a:A) <i> [(i=0) -> inP (((p a).2.2.1) @ 0), (i=1) -> inP (((p a).2.2.2) @ 1) ]
 
-data pushout (A B C: U) (f: C -> A) (g: C -> B)
-   = po1 (_: A) | po2 (_: B) | po3 (c: C) <i> [ (i=0) -> po1 (f c), (i=1) -> po2 (g c) ]
+data pushout (A B C: U) (f: A -> B) (g: A -> C)
+   = inl (_: B) | inr (_: C) | push (a: A) <i> [ (i=0) -> inl (f a), (i=1) -> inr (g a) ]
 
 data hs (S A: U)
    = base (x: A) | hub (f: S -> hs S A)
