@@ -2,36 +2,33 @@ module coeq where
 import nat
 
 data coeq (A B: U) (f g: A -> B)
-   = inC (_: B) | glueC (a: A) <i> [(i=0) -> inC (f a), (i=1) -> inC (g a) ]
+   = inC (_: B)
+   | glueC (a: A) <i> [(i=0) -> inC (f a), (i=1) -> inC (g a) ]
 
-coequRec (A B C : U) (f g : A -> B) (h: B -> C)
-      (y: (x : A) -> PathP (<i>C) (h (f x)) (h (g x)))
-    : (z : coeq A B f g) -> C
-    = split@((z : coeq A B f g) -> C) with
-        inC x -> h x
-        glueC x @ i -> y x @ i
+coequRec (A B C : U) (f g : A -> B) (h: B -> C) (y: (x : A) -> Path C (h (f x)) (h (g x)))
+   : (z : coeq A B f g) -> C
+   = split@((z : coeq A B f g) -> C) with { inC x -> h x ; glueC x @ i -> y x @ i }
 
-coequInd (A B : U) (f g : A -> B)
-      (C : coeq A B f g -> U)
-      (ix : (b : B) -> C (inC b))
-      (y: (x : A) -> PathP (<i> C (glueC {coeq A B f g} x @ i)) (ix (f x)) (ix (g x)))
-    : (z : coeq A B f g) -> C z
-    = split@((z : coeq A B f g) -> C z) with
-        inC x -> ix x
-        glueC x @ i -> y x @ i
+coequInd (A B : U) (f g : A -> B) (C : coeq A B f g -> U) (ix : (b : B) -> C (inC b))
+     (y: (x : A) -> PathP (<i> C (glueC {coeq A B f g} x @ i)) (ix (f x)) (ix (g x)))
+   : (z : coeq A B f g) -> C z
+   = split@((z : coeq A B f g) -> C z) with { inC x -> ix x ; glueC x @ i -> y x @ i }
 
 data colimit (A : nat -> U) (f : (n : nat) -> A n -> A (succ n))
-   = inc (n : nat) (x: A n) | com (n : nat) (a: A n) <i> [ (i=0) -> inc (succ n) (f n a), (i=1) -> inc n a]
+   = inc (n : nat) (x: A n)
+   | com (n : nat) (a: A n) <i> [ (i=0) -> inc (succ n) (f n a), (i=1) -> inc n a]
 
 data coeqP (A B: U) (p : A -> (b1 b2: B) * (_: Path B b1 b2) * (Path B b1 b2))
-   = inP (b: B) | glueP (a:A) <i> [(i=0) -> inP (((p a).2.2.1) @ 0), (i=1) -> inP (((p a).2.2.2) @ 1) ]
+   = inP (b: B)
+   | glueP (a:A) <i> [(i=0) -> inP (((p a).2.2.1) @ 0), (i=1) -> inP (((p a).2.2.2) @ 1) ]
 
 data pushout (A B C: U) (f: A -> B) (g: A -> C)
-   = inl (_: B) | inr (_: C) | push (a: A) <i> [ (i=0) -> inl (f a), (i=1) -> inr (g a) ]
+   = inl (_: B)
+   | inr (_: C)
+   | push (a: A) <i> [ (i=0) -> inl (f a), (i=1) -> inr (g a) ]
 
 data hs (S A: U)
    = base (x: A) | hub (f: S -> hs S A)
    | spoke (f: S -> hs S A) (s:S) <i> [ (i=0) -> hub {hs S A} f @ i, (i=1) -> f s ]
    | hubEq (x y: A) (p: S -> Path A x y) <i> [ (i=0) -> base x , (i=1) -> base y ]
    | spokeEq (x y: A) (p: S -> Path A x y) (s: S) <i> [(i=0)->hubEq {hs S A} x y p @ i, (i=1)->base(p s @ i) ]
-
