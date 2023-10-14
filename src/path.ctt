@@ -220,7 +220,7 @@ substToComp (A : U) (a b c : A) (p : Path A b c) (q : Path A a b) :
 JPM (A: U) (a b: A) (P: singl A a -> U) (u: P (eta A a)) (p: Path A a b): P (b,p)
     = subst (singl A a) T (eta A a) (b,p) (contr A a b p) u where T (z : singl A a) : U = P z
 
-data N = Z  | S (n: N)
+data N = Z | S (n: N)
 
 -- is-n-Type predicate
 n_grpd (A: U) (n: N): U = (a b: A) -> rec A a b n where
