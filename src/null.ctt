@@ -2,53 +2,6 @@ module null where
 import proto
 import path
 
-Modality : U
- = (isModal : U -> U)
- * (isPropIsModal : (A : U) -> isProp (isModal A))
- * (modality: U -> U)
- * (modalityIsModal : (A : U) -> isModal (modality A))
- * (eta: (A : U) -> A -> modality A)
- * (elim: (A : U) (B : modality A -> U)
-      (BModal : (x : modality A) -> isModal (B x))
-      (f: (x : A) -> (B (eta A x))) -> ((x : modality A) -> B x))
- * (elimBeta : (A : U) (B : modality A -> U)
-      (BModal : (x : modality A) -> isModal (B x))
-      (f : (x : A) -> (B (eta A x)))
-      (a : A) -> Path (B (eta A a)) (elim A B BModal f (eta A a)) (f a))
- * (isModal: (A : U) (x y : modality A) -> isModal (Path (modality A) x y))
- * unit
-
--- MODALITIES IN HOMOTOPY TYPE THEORY
--- Egbert Rijke, Michael Shulman, Bas Spitters
--- https://arxiv.org/pdf/1706.07526.pdf
-
--- Localization Modality (S=B, T=C)
-
-data Localize (A: U) (S T: A -> U) (F : (x: A) -> S x -> T x) (X: U)
-   = center (x: X)
-   | ext (a: A) (f: S a -> Localize A S T F X) (t: T a)
-   | isExt (a: A) (f: S a -> Localize A S T F X) (s: S a) <i>
-     [ (i=0) -> ext a f (F a s) , (i=1) -> f s ]
-   | extEq (a: A) (g h: T a -> Localize A S T F X)
-     (p: (s : S a) -> Path (Localize A S T F X) (g (F a s)) (h (F a s)))
-     (t : T a) <i> [ (i=0) -> g t , (i=1) -> h t ]
-   | isExtEq (a: A) (g h : T a -> Localize A S T F X)
-     (p: (s : S a) -> Path (Localize A S T F X) (g (F a s)) (h (F a s)))
-     (s : S a) <i> [ (i=0) -> extEq {Localize A S T F X} a g h p (F a s) @ i, (i=1) -> p s @ i]
-
-LocalizationInd (A X : U) (S T : A -> U)
-                (F : (x: A) -> S x -> T x)
-                (P : Localize A S T F X -> U)
-      (n : (x : X) -> P (center x))
-      (r : (a : A) (f: S a -> Localize A S T F X)
-           (g: (b: S a) -> P (f b))
-           (t: T a) -> P (ext a f t))
-      (s : (a : A) (f: S a -> Localize A S T F X)
-           (g: (b: S a) -> P (f b))
-           (b: S a) -> PathP (<i> P (isExt {Localize A S T F X} a f b @ i)) (r a f g (F a b)) (g b))
-    : (x : Localize A S T F X) -> P x
-    = ?
-
 -- Nullification Modality
 --   is the Hub and Spokes HIT
 --   is a Localization at a family of maps (S a -> 1)
@@ -66,11 +19,15 @@ data Null (A: U) (S: A -> U) (X: U)
      [ (i=0) -> hubEq {Null A S X} x y a p @ i ,
        (i=1) -> center (p s @ i) ]
 
+NullRec (A : U) (S: A -> U) (X Y : U) (f: Null A S Y) (g: X -> Y)
+    : Null A S X -> Y
+    = undefined
+
 NullInd (A X: U) (S: A -> U) (Y: Null A S X -> U)
       (n : (x : Null A S X) -> Null A S (Y x))
       (b : (x : X) -> Y (center x))
     : (x : Null A S X) -> Y x
-    = ?
+    = undefined
 
 {-
       split
@@ -81,6 +38,3 @@ NullInd (A X: U) (S: A -> U) (Y: Null A S X -> U)
         spokeEq x y a p s @ i ->
 -}
 
-NullRec (A : U) (S: A -> U) (X Y : U) (f: Null A S Y) (g: X -> Y)
-    : Null A S X -> Y
-    = ?
