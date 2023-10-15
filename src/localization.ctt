@@ -2,6 +2,10 @@ module localization where
 import proto
 import path
 
+-- This definition of localization is internal, stronger than
+-- standard sort of localization in homotopy theory;
+-  but remains equivalent.
+
 -- Localization Modality (S=B, T=C)
 
 data Localize (A X: U) (S T: A -> U) (F : (x:A) -> S x -> T x)
