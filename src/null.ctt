@@ -1,0 +1,38 @@
+module null where
+import path
+
+-- Nullification Modality
+-- Nullification is Hub and Spokes HIT
+-- Nullification is Localization at a family of maps (S a -> 1)
+
+data null (A: U) (S: A -> U) (X: U)
+   = center (x: X)
+   | hub (x: A) (f: S x -> null A S X)
+   | spoke (x: A) (f: S x -> null A S X) (s: S x) <i>
+     [ (i=0) -> hub {null A S X} x f @ i ,
+       (i=1) -> f s ]
+   | hubEq (x y: X) (a: A) (p: S a -> Path X x y) <i>
+     [ (i=0) -> center x ,
+       (i=1) -> center y ]
+   | spokeEq (x y: X) (a: A) (p: S a -> Path X x y) (s: S a) <i>
+     [ (i=0) -> hubEq {null A S X} x y a p @ i ,
+       (i=1) -> center (p s @ i) ]
+
+nullInd (A X: U) (S: A -> U) (Y: null A S X -> U)
+      (n : (x : null A S X) -> null A S (Y x))
+      (b : (x : X) -> Y (center x))
+    : (x : null A S X) -> Y x
+    = ?
+
+{-
+      split
+        center x -> g x
+        hub x f ->
+        spoke x f s @ i ->
+        hubEq x y a p @ i ->
+        spokeEq x y a p s @ i ->
+-}
+
+nullRec (A : U) (S: A -> U) (X Y : U) (f: null A S Y) (g: X -> Y)
+    : null A S X -> Y
+    = ?

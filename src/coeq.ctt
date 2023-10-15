@@ -27,8 +27,3 @@ data pushout (A B C: U) (f: A -> B) (g: A -> C)
    | inr (_: C)
    | push (a: A) <i> [ (i=0) -> inl (f a), (i=1) -> inr (g a) ]
 
-data hs (S A: U)
-   = base (x: A) | hub (f: S -> hs S A)
-   | spoke (f: S -> hs S A) (s:S) <i> [ (i=0) -> hub {hs S A} f @ i, (i=1) -> f s ]
-   | hubEq (x y: A) (p: S -> Path A x y) <i> [ (i=0) -> base x , (i=1) -> base y ]
-   | spokeEq (x y: A) (p: S -> Path A x y) (s: S) <i> [(i=0)->hubEq {hs S A} x y p @ i, (i=1)->base(p s @ i) ]
